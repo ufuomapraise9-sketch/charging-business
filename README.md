@@ -6,7 +6,7 @@ A responsive charging-station desk app for tracking 60 sockets, checking gadgets
 
 - Node.js 22.13 or newer (Node 24 recommended) and npm.
 - Locally: SQLite, included with Node.js.
-- Online: a Vercel project connected to a Neon PostgreSQL database.
+- Online: a Vercel project connected to a Supabase PostgreSQL database.
 
 The app does not collect or store card numbers. QR codes are lookup tokens; staff must verify the gadget before release. The supplied socket cards have reusable QR codes that identify sockets, not individual jobs. Each job also receives a unique claim code for manual lookup.
 
@@ -48,13 +48,13 @@ Set `PORT` to change the local port or `DATA_DIR` to choose another local data f
 
 The PDF of the supplied socket cards is deliberately excluded from deployment and source control because it contains payment details. Use the existing printed cards; do not upload or share that PDF publicly.
 
-## Deploy to Vercel with Neon
+## Deploy to Vercel with Supabase
 
-Vercel's application filesystem is not persistent, so online data uses PostgreSQL. Neon is connected through Vercel Marketplace and provides the `DATABASE_URL` setting. The app initializes its schema and 60 online sockets automatically on first request. The online database starts empty except for separate demo-mode sample records; local SQLite records are not imported.
+Vercel's application filesystem is not persistent, so online data uses PostgreSQL. The app uses the standard `pg` driver, so it can connect to Supabase PostgreSQL without Supabase Auth or the Supabase client SDK. The app initializes its schema and 60 online sockets automatically on first request. The online database starts empty except for separate demo-mode sample records; local SQLite records are not imported.
 
-1. **Push this project to GitHub.** Use a private repository. Do not upload `.env`, `data/`, SQLite database files, `node_modules/`, or `public/socket-cards.pdf`; the ignore files already exclude them. This project folder may need to be initialized and pushed to the GitHub repository before it can be imported.
+1. **Keep secrets and local data out of GitHub.** Do not upload `.env`, `data/`, SQLite database files, `node_modules/`, or `public/socket-cards.pdf`; the ignore files exclude them. This repository is public, so treat all committed source as visible to anyone.
 2. **Import the repository into Vercel.** Create a Vercel project from the GitHub repository and deploy the default Express app. No custom build command is required.
-3. **Connect Neon.** In the Vercel project, open the Marketplace/Storage integrations, add Neon, and link its PostgreSQL database to the project. Confirm `DATABASE_URL` is available for the Production environment.
+3. **Create or choose a Supabase project.** In Supabase, open **Connect** and choose the **Transaction pooler** connection string for serverless use. Add that PostgreSQL connection string to the Vercel project as `DATABASE_URL` for the Production environment. Use the database connection string, not the Supabase `anon` or `service_role` API keys.
 4. **Set production secrets in Vercel.** In Project Settings → Environment Variables, add:
    - `STAFF_PASSWORD`: a new, private passphrase of at least 16 characters.
    - `SESSION_SECRET`: generate a random value using the command in the local setup section; use at least 32 characters.
@@ -62,4 +62,4 @@ Vercel's application filesystem is not persistent, so online data uses PostgreSQ
 5. **Test the deployed site.** Open the Vercel HTTPS URL, sign in, try Demo mode, then confirm a live job can be created and collected. Open it on a phone; camera access requires HTTPS and browser permission.
 6. **Optional custom domain.** Add your business domain in Vercel project settings and follow its DNS instructions.
 
-Check Vercel and Neon plans, usage limits, terms, and billing before making the app available to customers; do not assume usage will remain free. Neon is the production system of record, so arrange database backups and restrict production database access. The database URL and staff secrets must remain in Vercel's encrypted environment settings, not in source files.
+Check Vercel and Supabase plans, usage limits, terms, and billing before making the app available to customers; do not assume usage will remain free. Supabase is the production system of record, so arrange database backups and restrict production database access. The database URL and staff secrets must remain in Vercel's encrypted environment settings, not in source files.

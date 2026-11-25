@@ -66,7 +66,7 @@ class Store {
     this.localDatabases = new Map();
     this.localLoginAttempts = new Map();
     if (this.postgres) {
-      const { Pool } = require('@neondatabase/serverless');
+      const { Pool } = require('pg');
       this.pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
     } else {
       this.dataDirectory = path.resolve(process.env.DATA_DIR || path.join(__dirname, 'data'));
