@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+data/
+public/socket-cards.pdf
+node_modules/

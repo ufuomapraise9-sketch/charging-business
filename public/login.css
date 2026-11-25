@@ -1,0 +1,20 @@
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;min-height:100vh;background:#f5f7fb;color:#202936;font-family:"DM Sans",Arial,sans-serif;display:grid;place-items:center;padding:24px}
+.login-shell{width:min(400px,100%)}
+.brand{display:flex;align-items:center;gap:11px;color:inherit;text-decoration:none;margin:0 0 24px 3px}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:#edf2ff;display:grid;place-items:center;color:#4769d9;font-size:21px}
+.brand strong{display:block;font:800 16px Manrope,Arial,sans-serif;letter-spacing:-.4px}
+.brand small{display:block;color:#9aa3b0;font-size:11px;margin-top:3px}
+.login-card{background:#fff;border:1px solid #edf0f4;border-radius:12px;padding:30px;box-shadow:0 12px 34px #2536570b}
+.eyebrow{font-size:9px;letter-spacing:1.25px;font-weight:700;color:#6079d4;margin:0 0 7px}
+h1{font:700 24px Manrope,Arial,sans-serif;letter-spacing:-.5px;margin:0 0 7px}
+.intro{color:#7d8796;font-size:12px;line-height:1.6;margin:0 0 24px}
+label{display:block;color:#485466;font-size:11px;font-weight:600;margin-bottom:7px}
+input{width:100%;height:42px;border:1px solid #e2e7ee;border-radius:6px;padding:0 11px;font:inherit;font-size:13px;color:#354052;outline:none}
+input:focus{border-color:#8ba0f0;box-shadow:0 0 0 3px #eef1ff}
+button{width:100%;height:41px;margin-top:11px;border:0;border-radius:7px;background:#496be0;color:#fff;font:600 12px "DM Sans",Arial,sans-serif;cursor:pointer}
+button:hover{background:#385bcf}button:disabled{opacity:.6;cursor:wait}button span{margin-left:5px}
+.error{min-height:17px;margin:7px 0 0;color:#be4554;font-size:11px}
+.privacy-note{border-top:1px solid #edf0f4;padding-top:15px;margin:17px 0 0;color:#929ba7;font-size:10px;line-height:1.6}
+footer{text-align:center;color:#a0a8b3;font-size:10px;margin-top:20px}
+@media(max-width:480px){body{padding:18px}.login-card{padding:23px}}

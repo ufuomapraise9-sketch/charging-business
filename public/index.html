@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Charging Desk</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script defer src="/vendor/html5-qrcode.min.js"></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" aria-label="Charging Desk home">
+          <span class="brand-mark">⚡</span>
+          <span><strong>ChargeDesk</strong><small>Gadget charging</small></span>
+        </a>
+        <nav class="nav-list" aria-label="Main navigation">
+          <button class="nav-link active" data-view="dashboard"><span>▦</span> Dashboard</button>
+          <button class="nav-link" data-view="new-job"><span>＋</span> New charge</button>
+          <button class="nav-link" data-view="scan"><span>▧</span> Scan & collect</button>
+          <button class="nav-link" data-view="history"><span>◷</span> Job history</button>
+          <button class="nav-link" data-view="settings"><span>⚙</span> Settings</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="help-card"><span class="help-icon">?</span><strong>Quick tip</strong><p>Always check the gadget matches before handing it back.</p></div>
+          <div class="staff-profile"><span class="avatar">S</span><span><strong>Staff desk</strong><small>Charging station</small></span><span class="profile-dots">···</span></div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark">⚡</span><strong>ChargeDesk</strong></div>
+          <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="page-title">Dashboard</strong></div>
+          <div class="topbar-actions">
+            <label class="mode-switch"><input id="demo-mode" type="checkbox"><span class="switch"></span><span>Demo mode</span></label>
+            <span class="top-divider"></span>
+            <span class="today-label" id="today-label"></span>
+            <button class="text-button" id="logout-button" type="button">Sign out</button>
+            <span class="avatar top-avatar">S</span>
+          </div>
+        </header>
+
+        <div class="content-wrap">
+          <section class="view active" id="view-dashboard">
+            <div class="page-heading heading-row">
+              <div><p class="eyebrow">OVERVIEW</p><h1>Charging dashboard</h1><p class="muted">Here’s what’s happening at your station today.</p></div>
+              <button class="button primary" data-go="new-job"><span>＋</span> Start a charge</button>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card"><div class="stat-icon mint">▣</div><div class="stat-caption">Available sockets</div><div class="stat-number" id="stat-available">—</div><div class="stat-foot"><span class="dot dot-green"></span> Ready to use</div></article>
+              <article class="stat-card"><div class="stat-icon amber">ϟ</div><div class="stat-caption">Currently charging</div><div class="stat-number" id="stat-occupied">—</div><div class="stat-foot"><span class="dot dot-amber"></span> Active jobs</div></article>
+              <article class="stat-card"><div class="stat-icon rose">⊘</div><div class="stat-caption">Out of service</div><div class="stat-number" id="stat-out">—</div><div class="stat-foot"><span class="dot dot-rose"></span> Need attention</div></article>
+              <article class="stat-card"><div class="stat-icon blue">▤</div><div class="stat-caption">Total sockets</div><div class="stat-number">60</div><div class="stat-foot"><span class="dot dot-blue"></span> All locations</div></article>
+            </div>
+            <section class="panel socket-panel">
+              <div class="panel-heading"><div><h2>Socket status</h2><p class="muted">Select a socket to manage its service status.</p></div><div class="legend"><span><i class="legend-dot green-bg"></i>Available</span><span><i class="legend-dot amber-bg"></i>Occupied</span><span><i class="legend-dot rose-bg"></i>Out of service</span></div></div>
+              <div class="socket-grid" id="socket-grid" aria-label="Socket status grid"></div>
+            </section>
+            <section class="panel recent-panel"><div class="panel-heading"><div><h2>Recent activity</h2><p class="muted">Latest jobs at your station.</p></div><button class="text-button" data-go="history">View history <span>→</span></button></div><div class="table-wrap"><table><thead><tr><th>CLAIM CODE</th><th>GADGET</th><th>SOCKET</th><th>PRICE</th><th>STATUS</th></tr></thead><tbody id="recent-jobs"></tbody></table></div></section>
+          </section>
+
+          <section class="view" id="view-new-job">
+            <div class="page-heading"><p class="eyebrow">NEW CHECK-IN</p><h1>Start a charging job</h1><p class="muted">Enter the customer and gadget details to reserve a socket.</p></div>
+            <div class="form-layout">
+              <form class="panel form-panel" id="new-job-form">
+                <div class="section-title"><span class="step-number">1</span><div><h2>Customer & gadget</h2><p class="muted">Add details to identify the job later.</p></div></div>
+                <label class="field"><span>Customer name or reference <b>*</b></span><input name="customer" maxlength="100" placeholder="e.g. Alex or ticket #104" required></label>
+                <label class="field"><span>Gadget description <b>*</b></span><input name="gadget" maxlength="120" placeholder="e.g. Black iPhone 15 with clear case" required></label>
+                <div class="field-grid">
+                  <label class="field"><span>Socket</span><select name="socket" id="job-socket"><option value="">Auto-assign next available</option></select><small>Only available sockets are listed.</small></label>
+                  <label class="field"><span>Price <b>*</b></span><div class="input-with-prefix"><span id="price-currency">USD</span><input name="price" id="job-price" type="number" min="0" step="0.01" required></div><small id="price-hint"></small></label>
+                </div>
+                <label class="field"><span>Notes <small class="optional">(optional)</small></span><textarea name="notes" rows="3" maxlength="500" placeholder="Condition, accessories, or special instructions"></textarea></label>
+                <div class="form-actions"><span class="muted tiny">Fields marked <b>*</b> are required.</span><button class="button primary" type="submit">Create job <span>→</span></button></div>
+              </form>
+              <aside class="side-note"><div class="note-icon">▣</div><h3>Use the matching socket card</h3><p>Give the customer the preprinted QR card for the assigned socket. The card QR identifies its socket; the app finds the active job.</p><div class="note-divider"></div><p class="note-small"><strong>Manual fallback</strong><br>A unique claim code is also created in case the socket card is unavailable. No new QR code is generated.</p></aside>
+            </div>
+          </section>
+
+          <section class="view" id="view-scan">
+            <div class="page-heading"><p class="eyebrow">CHECK-OUT</p><h1>Scan & collect</h1><p class="muted">Scan a preprinted socket card or enter the unique fallback claim code.</p></div>
+            <div class="scan-layout">
+              <section class="panel scan-panel"><div class="panel-heading"><div><h2>Scan socket card QR</h2><p class="muted">The QR identifies the socket number on the preprinted card.</p></div><span class="camera-icon">▧</span></div><div id="qr-reader"></div><div class="camera-controls"><button class="button secondary" id="camera-start">Start camera</button><button class="button secondary hidden" id="camera-stop">Stop camera</button><span class="muted tiny" id="camera-status">Camera works on localhost or a secure HTTPS connection.</span></div></section>
+              <div class="or-divider"><span>OR</span></div>
+              <form class="panel lookup-panel" id="lookup-form"><div class="panel-heading"><div><h2>Manual lookup</h2><p class="muted">Enter the unique fallback claim code.</p></div></div><label class="field"><span>Fallback claim code</span><input name="claimCode" autocomplete="off" placeholder="e.g. CHG-A1B2C3…" required></label><button class="button primary full-button" type="submit">Find job <span>→</span></button></form>
+            </div>
+            <div id="collection-result" class="collection-result"></div>
+          </section>
+
+          <section class="view" id="view-history">
+            <div class="page-heading heading-row"><div><p class="eyebrow">RECORDS</p><h1>Job history</h1><p class="muted">Search and review charging jobs.</p></div><button class="button primary" data-go="new-job"><span>＋</span> New charge</button></div>
+            <section class="panel history-panel">
+              <div class="history-toolbar"><label class="search-box"><span>⌕</span><input id="history-search" placeholder="Search customer, gadget, code or socket"></label><label class="filter-select"><span class="sr-only">Filter job status</span><select id="history-status"><option value="all">All jobs</option><option value="active">Active</option><option value="collected">Collected</option><option value="cancelled">Cancelled</option></select></label></div>
+              <div class="table-wrap"><table><thead><tr><th>CLAIM CODE</th><th>CUSTOMER</th><th>GADGET</th><th>SOCKET</th><th>PRICE</th><th>DATE</th><th>STATUS</th><th></th></tr></thead><tbody id="history-jobs"></tbody></table></div><p class="muted tiny table-foot">Showing up to 500 most recent matching jobs.</p>
+            </section>
+          </section>
+
+          <section class="view" id="view-settings">
+            <div class="page-heading"><p class="eyebrow">PREFERENCES</p><h1>Settings</h1><p class="muted">Customize receipts, pricing defaults, and accepted payment methods.</p></div>
+            <form class="panel settings-panel" id="settings-form">
+              <div class="settings-section"><div class="section-title"><span class="settings-icon">⌂</span><div><h2>Business details</h2><p class="muted">Shown on printed customer claim cards.</p></div></div><div class="field-grid"><label class="field"><span>Business name <b>*</b></span><input name="businessName" maxlength="80" required></label><label class="field"><span>Currency code <b>*</b></span><input name="currency" maxlength="3" pattern="[A-Za-z]{3}" placeholder="USD" required><small>Three-letter code, e.g. USD, EUR, GBP.</small></label></div></div>
+              <div class="settings-section"><div class="section-title"><span class="settings-icon">¤</span><div><h2>Price rules</h2><p class="muted">Defaults for new charging jobs; staff can adjust each price.</p></div></div><div class="field-grid"><label class="field"><span>Default price</span><input name="basePrice" type="number" min="0" step="0.01" required></label><label class="field"><span>Minimum allowed price</span><input name="minimumPrice" type="number" min="0" step="0.01" required></label></div></div>
+              <div class="settings-section"><div class="section-title"><span class="settings-icon">◎</span><div><h2>Payment methods</h2><p class="muted">Choose how staff can record customer payments. No card details are stored.</p></div></div><label class="field"><span>One method per line (1–8 methods)</span><textarea name="paymentMethods" id="payment-methods" rows="4" required></textarea></label></div>
+              <div class="form-actions"><span class="muted tiny" id="settings-message"></span><button class="button primary" type="submit">Save settings</button></div>
+            </form>
+          </section>
+        </div>
+        <footer class="app-footer"><span>ChargeDesk <span class="footer-dot">·</span> Keep every charge accounted for.</span><span>Local database storage</span></footer>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="modal-root"></div>
+  </body>
+</html>
